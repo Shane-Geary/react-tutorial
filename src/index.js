@@ -24,7 +24,7 @@ function Square(props) {
     render() {
       return (
         <div>
-          <div className="status">{status}</div>
+          {/* <div className="status">{status}</div> */}
           <div className="board-row">
             {this.renderSquare(0)}
             {this.renderSquare(1)}
@@ -57,7 +57,9 @@ function Square(props) {
     }
 
     handleClick(i) {
-      const squares = this.state.squares.slice();
+      const history = this.state.history;
+      const current = history[history.length - 1];
+      const squares = current.squares.slice();
       if (calculateWinner(squares) || squares[i]) {
         return;
       }
@@ -75,16 +77,16 @@ function Square(props) {
       const current = history[history.length - 1];
       const winner = calculateWinner(current.squares); 
 
-      const move = history.map((step, move)) => {
+      const moves = history.map((step, move) => {
         const desc = move ?
         'Go to move # ' + move :
         'Go to game start';
         return (
-          <li>
+          <li key={move}>
             <button onClick={() => this.jumpTo(move)}>{desc}</button>
           </li>
         )
-      }
+      });
 
       let status;
       if (winner) {
@@ -103,7 +105,7 @@ function Square(props) {
           </div>
           <div className="game-info">
             <div>{status}</div>
-            <ol>{/* TODO */}</ol>
+            <ol>{moves}</ol>
           </div>
         </div>
       );
